@@ -1,8 +1,13 @@
 {
   "name": "diload",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple bundler for directory-based trees of data",
-  "keywords": ["json", "filesystem", "tree", "bundler"],
+  "keywords": [
+    "json",
+    "filesystem",
+    "tree",
+    "bundler"
+  ],
   "author": "CodeSquid",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -14,7 +19,6 @@
     "clean": "rimraf dist",
     "build": "rollup -c",
     "watch": "rollup -cw",
-
     "prepare": "pnpm clean && pnpm build"
   },
   "devDependencies": {

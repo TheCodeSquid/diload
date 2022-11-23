@@ -1,7 +1,7 @@
 # diload
 
 diload (pronounced "dye-load") is a simple node.js tool I made to help with adding data to static sites
-in a simple, manageable way.
+in an easy to manage way.
 
 ## How Does It Work?
 

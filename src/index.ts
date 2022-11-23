@@ -3,8 +3,11 @@ import path from "path";
 
 /**
  * Recursively load data from directory `dir`.
+ *
+ * @param dir The root directory to be traversed.
+ * @param f An optional transformer function to be applied to each file.
  */
-export async function loadDirectory(dir: string): Promise<Record<string, any>> {
+export async function loadDirectory(dir: string, f?: (name: string, data: any) => any | Promise<any>): Promise<Record<string, any>> {
   const obj: Record<string, any> = {};
 
   for (const name of await readdir(dir)) {
@@ -12,13 +15,18 @@ export async function loadDirectory(dir: string): Promise<Record<string, any>> {
 
     const stat = await lstat(file);
     if (stat.isDirectory()) {
-      obj[name] = await loadDirectory(file);
+      obj[name] = await loadDirectory(file, f);
     } else if (path.extname(file) === ".json") {
       const buf = await readFile(file);
       const decoder = new TextDecoder();
       const text = decoder.decode(buf);
 
-      obj[path.basename(file, ".json")] = JSON.parse(text);
+      const name = path.basename(file, ".json");
+      let data = JSON.parse(text);
+      if (f !== undefined) {
+        data = await f(file, data);
+      }
+      obj[name] = data;
     }
   }
 

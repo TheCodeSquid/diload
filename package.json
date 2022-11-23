@@ -2,11 +2,10 @@
   "name": "diload",
   "version": "0.1.0",
   "description": "A simple bundler for directory-based trees of data",
-  "keywords": [],
+  "keywords": ["json", "filesystem", "tree", "bundler"],
   "author": "CodeSquid",
   "license": "MIT",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.js",
   "files": [
     "dist"
   ],
@@ -16,7 +15,7 @@
     "build": "rollup -c",
     "watch": "rollup -cw",
 
-    "prepare": "pnpm build"
+    "prepare": "pnpm clean && pnpm build"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^9.0.2",

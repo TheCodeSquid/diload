@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
+    "moduleResolution": "node",
 
     "strict": true,
 
@@ -9,8 +10,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
 
     "outDir": "./dist",
     "declarationDir": "./dist"
-  }
+  },
+  "include": ["./src"]
 }

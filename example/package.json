@@ -1,5 +1,9 @@
 {
+  "private": true,
   "name": "example",
   "type": "module",
-  "main": "index.js"
+  "main": "index.js",
+  "dependencies": {
+    "diload": "workspace:^0.1.0"
+  }
 }

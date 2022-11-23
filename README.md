@@ -8,5 +8,3 @@ in a simple, manageable way.
 Directories are used to group JSON files or other directories together.
 When bundled, these groups will be represented by simple JSON objects,
 with the file names becoming the keys.
-
-An example is provided in [example](example)

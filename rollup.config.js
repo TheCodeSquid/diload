@@ -10,6 +10,7 @@ const config = {
     format: "esm"
   },
   external: [
+    "fs",
     "fs/promises",
     "path"
   ],

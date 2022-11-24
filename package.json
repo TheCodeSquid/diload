@@ -1,6 +1,6 @@
 {
   "name": "diload",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A simple bundler for directory-based trees of data",
   "keywords": [
     "json",

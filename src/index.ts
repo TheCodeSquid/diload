@@ -3,24 +3,21 @@ import {lstat, readdir, readFile} from "fs/promises";
 import path from "path";
 
 const metaFile = "[meta].json";
+const aggrKey = "_aggregate";
 
 function warn(file: string, msg: string) {
-  console.error(`[warning][${file}]: ${msg}`)
+  console.error(`[warning](${file}): ${msg}`)
 }
 
 /**
  * Recursively load data from directory `dir`.
  *
  * By default, files and subdirectories are put directly into the parent directory object,
- * but they can be aggregated into a specific key if `aggregateName` is specified.
- *
- * `aggregateName` must be specified to make use of the `[meta.json]` files
- * for adding data to directories. If left unset, the meta files will be ignored.
+ * but they can be aggregated into a specific key if `_aggregate` is specified in the `[meta].json` file.
  *
  * @param dir The root directory to be traversed.
- * @param aggregateName The key that child data will be aggregated under.
  */
-export async function loadDirectory(dir: string, aggregateName?: string): Promise<Record<string, any>> {
+export async function loadDirectory(dir: string): Promise<Record<string, any>> {
   const obj: Record<string, any> = {};
 
   for (const name of await readdir(dir)) {
@@ -30,27 +27,34 @@ export async function loadDirectory(dir: string, aggregateName?: string): Promis
     if (stat.isDirectory()) {
       let dirObj: Record<string, any>;
       // Note to self: Don't forget to pass all function arguments here
-      const subdir = await loadDirectory(file, aggregateName);
+      const subdir = await loadDirectory(file);
 
-      if (aggregateName !== undefined) {
-        const metaPath = path.join(file, metaFile);
-        if (existsSync(metaPath)) {
-          dirObj = await loadFile(metaPath);
+      const metaPath = path.join(file, metaFile);
+      if (existsSync(metaPath)) {
+        dirObj = await loadFile(metaPath);
+
+        if (aggrKey in dirObj) {
+          const aggrName: string = dirObj[aggrKey];
+          delete dirObj[aggrKey];
+
+          if (aggrName in dirObj) {
+            warn(metaPath, "aggregate key present in meta file, overwriting");
+          }
+
+          dirObj[aggrName] = subdir;
         } else {
-          dirObj = {};
+          warn(metaPath, "meta file present but contains no aggregate key, ignoring");
+          dirObj = subdir;
         }
-
-        if (aggregateName in dirObj) {
-          warn(file, "aggregate key present in meta file, overwriting");
-        }
-        dirObj[aggregateName] = subdir;
       } else {
         dirObj = subdir;
       }
 
       obj[name] = dirObj;
     } else if (path.extname(file) === ".json" && path.basename(file) !== metaFile) {
-      obj[name] = await loadFile(file);
+      const id = path.basename(name, ".json");
+
+      obj[id] = await loadFile(file);
     }
   }
 

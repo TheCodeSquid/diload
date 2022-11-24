@@ -1,6 +1,6 @@
 {
   "name": "diload",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A simple bundler for directory-based trees of data",
   "keywords": [
     "json",
@@ -11,6 +11,7 @@
   "author": "CodeSquid",
   "license": "MIT",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
